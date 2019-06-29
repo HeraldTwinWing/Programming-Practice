@@ -140,14 +140,18 @@
     <ClCompile Include="FileIO.cpp" />
     <ClCompile Include="GameEvent.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainWhile.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="FileIO.h" />
     <ClInclude Include="GameEvent.h" />
+    <ClInclude Include="MainWhile.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
