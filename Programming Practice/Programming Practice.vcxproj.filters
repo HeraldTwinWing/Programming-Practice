@@ -30,6 +30,12 @@
     <ClCompile Include="FileIO.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="MainWhile.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameEvent.h">
@@ -42,6 +48,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="FileIO.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWhile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
