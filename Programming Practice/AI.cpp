@@ -29,3 +29,8 @@ void AI::moveAI()
 		x_coordinate += moveSpeed;
 	}
 }
+
+void AI::detectBomb()
+{
+
+}

@@ -8,7 +8,7 @@ enum BlockTypeEnum
 class Map
 {
 private:
-    BlockTypeEnum map[12][12];
+    BlockTypeEnum map[13][15];
 public:
     Map();
 
