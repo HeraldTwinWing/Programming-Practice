@@ -70,12 +70,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\Avala\source\repos\Programming Practice\Programming Practice\SDL2-2.0.9\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Avala\source\repos\Programming Practice\Programming Practice\SDL2-2.0.9\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\Programming Practice\SDL2-2.0.9\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\Programming Practice\SDL2-2.0.9\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\Avala\source\repos\Programming Practice\Programming Practice\SDL2-2.0.9\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Avala\source\repos\Programming Practice\Programming Practice\SDL2-2.0.9\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\Programming Practice\SDL2-2.0.9\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\Programming Practice\SDL2-2.0.9\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -135,7 +135,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Character.cpp" />
+    <ClCompile Include="FileIO.cpp" />
+    <ClCompile Include="GameEvent.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Character.h" />
+    <ClInclude Include="FileIO.h" />
+    <ClInclude Include="GameEvent.h" />
+    <ClInclude Include="Map.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
