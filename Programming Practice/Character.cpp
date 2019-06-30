@@ -24,7 +24,7 @@ SDL_Point Character::getMapPos()
     result.y = (int)(pos.y / 40);
     if (pos.x % 40)
         ++result.x;
-    if (pos.y % 30)
+    if (pos.y % 40)
         ++result.y;
     return result;
 }

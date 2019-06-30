@@ -1,15 +1,18 @@
 #pragma once
 #include <array>
+#include <vector>
 #include <string>
 #include "Map.h"
+#include "Character.h"
 //written by imaginicleo
 
-class AI
+class AI:public Character
 {
 public:
 	//声明类成员
 	std::string textureName;//记录贴图文件路径
-	bool map[13][15];//地图数据，以二维数组形式储存
+	std::array<std::array<BlockTypeEnum, 13>, 15> currentMap;
+	bool map[15][13];//地图数据，以二维数组形式储存
 	std::array<bool, 4> movingFlags = { false,false,false,false };
 	/*
 	*记录移动状态的标志
@@ -26,10 +29,13 @@ public:
 	double moveSpeed;//记录移动速度，初始化的时候传入默认值20.0
 	int restBombNum;//记录炸弹数量，初始化的时候传入默认值1
 	//声明成员函数
-	AI(std::string textureName, int x, int y, int rad = 1, double speed = 20.0, int bombnum = 1);//构造函数，测试用
+	AI(std::string textureName, int x, int y, std::array<std::array<BlockTypeEnum, 15>, 13> & Map, int rad = 1, double speed = 20.0, int bombnum = 1);//构造函数，测试用
+
+	void controlAI();
 	void moveAI();
-	void detectPath();//遍历地图 将地图数据转换成布尔二维数组
-	void findWay();
+	void moveByGrid(int gridnum);
+	void detectPath();//遍历地图，将地图数据转换成布尔二维数组。能走的路记为true，不能走的路记为false。
+	void findPath(std::string option);
 
 };
 
