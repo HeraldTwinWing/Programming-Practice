@@ -15,8 +15,6 @@ private:
     double thisTime;    //当前帧时间戳
     double lastTime;    //上一帧时间戳
     double deltaTime;
-
-    Window* mainWindow;
 };
 
 extern MainWhile* mainWhile;
