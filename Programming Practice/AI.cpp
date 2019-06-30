@@ -2,7 +2,7 @@
 
 
 
-AI::AI(std::string textureName, int x, int y, std::array<std::array<BlockTypeEnum, 15>, 13> & Map, int rad, double speed, int bombnum)
+AI::AI(std::string textureName, int x, int y, std::array<std::array<BlockTypeEnum, 13>, 15> & Map, int rad, double speed, int bombnum)
 {
 	this->textureName = textureName;
 	this->x_coordinate = x;
@@ -53,21 +53,30 @@ void AI::detectPath()
 		{
 			if (currentMap[i][j] == UNDESTRUCTIBLE || currentMap[i][j] == DANGER || currentMap[i][j] == BOMB || currentMap[i][j] == WATERWILLEXIST)
 			{
-				map[i][j] = false;
+				map[i][j] = fals+e;
 			}
 		}
 	}
 }
 
+void AI::judgeAvailable()
+{
+	if (grid.first == 0)
+	{
+		if()
+	}
+}
+
 void AI::findPath(std::string option)
 {
-	std::vector<std::array<int, 2>> tempGrid;
-	for (int i = 0; i < 13; i++)
+	/*
+	*目的：使用BFS（宽度优先算法）来算出可移动路径
+	*/
+	
+	std::pair<int, int> temp;
+	if (grid.first == 0)
 	{
-		for (int j = 0; j < 15; j++)
-		{
-
-		}
+		
 	}
 }
 

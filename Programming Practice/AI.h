@@ -25,16 +25,18 @@ public:
 	int y_coordinate;//纵坐标
 	int currentLine;//记录当前所在行
 	int currentRow;//记录当前所在列
+	std::pair<int, int>grid = { currentLine,currentRow };//记录坐标对
 	int radiation;//记录爆炸半径（其实是十字形），初始化的时候传入默认值1
 	double moveSpeed;//记录移动速度，初始化的时候传入默认值20.0
 	int restBombNum;//记录炸弹数量，初始化的时候传入默认值1
 	//声明成员函数
-	AI(std::string textureName, int x, int y, std::array<std::array<BlockTypeEnum, 15>, 13> & Map, int rad = 1, double speed = 20.0, int bombnum = 1);//构造函数，测试用
+	AI(std::string textureName, int x, int y, std::array<std::array<BlockTypeEnum, 13>, 15> & Map, int rad = 1, double speed = 20.0, int bombnum = 1);//构造函数，测试用
 
 	void controlAI();
 	void moveAI();
 	void moveByGrid(int gridnum);
 	void detectPath();//遍历地图，将地图数据转换成布尔二维数组。能走的路记为true，不能走的路记为false。
+	void judgeAvailable();
 	void findPath(std::string option);
 
 };
