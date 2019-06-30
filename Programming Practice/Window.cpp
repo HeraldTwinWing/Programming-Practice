@@ -8,6 +8,11 @@ Window::Window()
     render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 }
 
+SDL_Renderer* Window::getRender()
+{
+    return render;
+}
+
 void Window::refresh()
 {
     SDL_RenderPresent(render);

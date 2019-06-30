@@ -2,12 +2,15 @@
 #include <SDL.h>
 #include "GameEvent.h"
 #include "Window.h"
+#include "Character.h"
 
 class MainWhile
 {
 public:
     MainWhile();
     void onExecute();
+    void onUpdata();
+
     ~MainWhile();
 
 private:

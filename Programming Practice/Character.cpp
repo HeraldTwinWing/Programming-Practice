@@ -1,6 +1,9 @@
 #include "Character.h"
 
-Character::Character():moving(),moveTemp()
+Character* player1;
+Character* player2;
+
+Character::Character() :moving(), moveTemp()
 {
     //std::ifstream input("data/characterData");
     pos = { 20, 20 };
@@ -9,6 +12,9 @@ Character::Character():moving(),moveTemp()
     maxBombPower = 1;
     bombNum = 1;
     maxBombNum = 1;
+    texture = SDL_CreateTextureFromSurface(mainWindow->getRender()
+        , IMG_Load("picture/character.png"));
+    texturePos = { pos.x, pos.y , 44, 56 };
 
     for (auto& i : moving)
         i = false;
@@ -31,6 +37,11 @@ SDL_Point Character::getMapPos()
 void Character::refresh(double deltaTime)
 {
     move(deltaTime);
+
+    texturePos.x = pos.x + 28;
+    texturePos.y = pos.y + 18;
+    std::cout << pos.x << " " << pos.y << std::endl;
+    SDL_RenderCopy(mainWindow->getRender(), texture, nullptr, &texturePos);
 }
 
 void Character::move(double deltaTime)
@@ -49,30 +60,45 @@ void Character::move(double deltaTime)
         int v2 = i - 1;
         if (v2 < 0)
             v1 = 3;
-        
+
         switch (i)
         {
         case 0:
-            if ((pos.x % 40) < 15)
-                moveTemp[0] -= displacement;
-            else if ((pos.x % 40) > 25)
-                moveTemp[0] += displacement;
-            else
+            if (pos.x % 40 >= 15 &&
+                pos.x % 40 <= 25 &&
+                mapObj.judgeBlockType(pos.x, pos.y - 1) == EMPTY)
                 moveTemp[1] -= displacement;
+            else if (pos.x % 40 < 15 &&
+                mapObj.judgeBlockType(pos.x - 1, pos.y - 1) == EMPTY)
+                moveTemp[0] -= displacement;
+            else if (pos.x % 40 > 25 &&
+                mapObj.judgeBlockType(pos.x + 1, pos.y - 1) == EMPTY)
+                moveTemp[0] += displacement;
+            break;
         case 1:
-            if ((pos.y % 40) < 15)
+            if (pos.y % 40 >= 15 &&
+                pos.y % 40 <= 25 &&
+                mapObj.judgeBlockType(pos.x + 1, pos.y) == EMPTY)
+                moveTemp[0] += displacement;
+            else if (pos.y % 40 < 15 &&
+                mapObj.judgeBlockType(pos.x + 1, pos.y - 1) == EMPTY)
                 moveTemp[1] -= displacement;
-            else if ((pos.y % 40) > 25)
+            else if (pos.y % 40 > 25 &&
+                mapObj.judgeBlockType(pos.x + 1, pos.y + 1) == EMPTY)
                 moveTemp[1] += displacement;
-            else
-                moveTemp[0] += displacement;
+            break;
         case 2:
-            if ((pos.x % 40) < 15)
-                moveTemp[0] -= displacement;
-            else if ((pos.x % 40) > 25)
-                moveTemp[0] += displacement;
-            else
+            if (pos.x % 40 >= 15 &&
+                pos.x % 40 <= 25 &&
+                mapObj.judgeBlockType(pos.x, pos.y + 1) == EMPTY)
                 moveTemp[1] += displacement;
+            else if (pos.x % 40 < 15 &&
+                mapObj.judgeBlockType(pos.x - 1, pos.y + 1) == EMPTY)
+                moveTemp[0] -= displacement;
+            else if (pos.x % 40 > 25 &&
+                mapObj.judgeBlockType(pos.x + 1, pos.y + 1) == EMPTY)
+                moveTemp[0] += displacement;
+            break;
         case 3:
             if ((pos.y % 40) < 15)
                 moveTemp[1] -= displacement;
@@ -206,3 +232,4 @@ void Character::p1KeyUpEvent(SDL_Keycode sym)
         break;
     }
 }
+

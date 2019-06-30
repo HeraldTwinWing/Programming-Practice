@@ -12,7 +12,7 @@ enum BlockTypeEnum
 class Map
 {
 private:
-    std::array<std::array<BlockTypeEnum, 15>, 13> map;
+    std::array<std::array<BlockTypeEnum, 15>, 13> map;  //访问方式map[y][x]
     std::array<std::array<double, 15>, 13> timeBuff;
 public:
     Map();
@@ -20,6 +20,8 @@ public:
     std::array<std::array<BlockTypeEnum, 15>, 13>& getMap();
     
     BlockTypeEnum judgeBlockType(int x, int y);
+
+    bool destruct(int x, int y);
 
     //从文件加载地图
     void loadMap();
