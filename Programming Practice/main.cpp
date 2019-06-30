@@ -1,10 +1,15 @@
 #include <iostream>
 #include <SDL.h>
 #include "MainWhile.h"
+#include"Map.h"
+
 
 int main(int argc, char* args[])
-{
-    if (SDL_Init(SDL_INIT_EVERYTHING) == -1)
+{ 
+	Map A;
+	A.loadMap();
+	A.Show();
+	if (SDL_Init(SDL_INIT_EVERYTHING) == -1)
     {
         std::cout << SDL_GetError() << std::endl;
     }
@@ -14,6 +19,5 @@ int main(int argc, char* args[])
     mainWhile->onExecute();
 
     SDL_Quit();
-
-    return 0;
+	 return 0;
 }

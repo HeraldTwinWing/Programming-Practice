@@ -62,7 +62,7 @@ bool Map::Judge(int x, int y) {
 	if (!(x >= 0 && x < 13 && y >= 0 && y < 15))
 		return false;
 	if (map[x][y] == DESTRUCTIBLE) {
-		map_time[x][y] = SDL_GetTicks();//记录时间间隔
+		map_time[x][y] = SDL_GetTicks();
 		map[x][y] = DANGER;
 		double lastime = SDL_GetTicks();
 		if (lastime - map_time[x][y] > 500) {
@@ -108,6 +108,13 @@ void Map::refresh(int x, int y, bool boom) {
 		a=Judge(x, y + 1);
 	}
 }
+
+
+
+
+
+
+
 
 /*
 Map date in the mapdate.txt

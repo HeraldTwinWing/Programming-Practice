@@ -25,7 +25,7 @@ void MainWhile::onExecute()
                 running = false;
             }
 
-            eventHandler.OnEvent(event);
+            eventHandler->OnEvent(event);
         }
         mainWindow->refresh();
     }
