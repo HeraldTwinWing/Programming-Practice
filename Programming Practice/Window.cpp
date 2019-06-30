@@ -1,5 +1,7 @@
 #include "Window.h"
 
+Window* mainWindow;
+
 Window::Window()
 {
     window = SDL_CreateWindow("ргргрг", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 600, 600, SDL_WINDOW_SHOWN);
