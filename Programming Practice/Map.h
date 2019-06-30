@@ -1,17 +1,20 @@
 #pragma once
+#include <array>
 
 enum BlockTypeEnum
 {
-     DESTRUCTIBLE, UNDESTRUCTIBLE, EMPYT
+     DESTRUCTIBLE, UNDESTRUCTIBLE, EMPTY, DANGER, BOMB
 };
 
 class Map
 {
 private:
-    BlockTypeEnum map[13][15];
+    std::array<std::array<BlockTypeEnum, 15>, 13> map;
 public:
     Map();
 
+    std::array<std::array<BlockTypeEnum, 15>, 13>& getMap();
+    
     //从文件加载地图
     void loadMap();
 

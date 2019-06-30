@@ -17,3 +17,5 @@ public:
 
     ~Window();
 };
+
+extern Window* mainWindow;
