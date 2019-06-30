@@ -30,5 +30,6 @@ SDL_Point Character::getMapPos()
 
 void Character::move(Map map)
 {
+    SDL_Point mapPos = getMapPos();
     
 }

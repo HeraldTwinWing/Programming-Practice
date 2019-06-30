@@ -1,4 +1,5 @@
 #pragma once
+#include <array>
 
 enum BlockTypeEnum
 {
@@ -8,10 +9,12 @@ enum BlockTypeEnum
 class Map
 {
 private:
-    BlockTypeEnum map[12][12];
+    std::array<std::array<BlockTypeEnum, 15>, 13> map;
 public:
     Map();
 
+    std::array<std::array<BlockTypeEnum, 15>, 13>& getMap();
+    
     //从文件加载地图
     void loadMap();
 
