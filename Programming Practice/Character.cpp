@@ -9,6 +9,7 @@ Character::Character()
     maxBombPower = 1;
     bombNum = 1;
     maxBombNum = 1;
+    moving = { false };
 
     for (auto& i : moving)
         i = false;
