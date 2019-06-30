@@ -138,6 +138,8 @@ void GameEvent::OnInputBlur()
 
 void GameEvent::OnKeyDown(SDL_Keycode sym, Uint16 mod)
 {
+    if (sym == SDLK_w)
+        std::cout << "w down" << std::endl;
     player1->p1KeyDownEvent(sym);
     player2->p2KeyDownEvent(sym);
 }
@@ -145,7 +147,7 @@ void GameEvent::OnKeyDown(SDL_Keycode sym, Uint16 mod)
 void GameEvent::OnKeyUp(SDL_Keycode sym, Uint16 mod)
 {
     player1->p1KeyUpEvent(sym);
-    player1->p2KeyUpEvent(sym);
+    player2->p2KeyUpEvent(sym);
 }
 
 void GameEvent::OnMouseFocus()

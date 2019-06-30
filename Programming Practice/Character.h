@@ -4,12 +4,14 @@
 #include <iostream>
 #include <SDL_image.h>
 #include "Map.h"
+#include "Bomb.h"
 #include "Window.h"
 
 class Character
 {
 private:
     SDL_Point pos;
+    SDL_Point mapPos;
     SDL_Texture* texture;
     SDL_Rect texturePos;
     int speed;

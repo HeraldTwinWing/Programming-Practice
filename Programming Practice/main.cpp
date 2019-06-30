@@ -6,9 +6,6 @@
 
 int main(int argc, char* args[])
 { 
-	Map A;
-	A.loadMap();
-	A.Show();
 	if (SDL_Init(SDL_INIT_EVERYTHING) == -1)
     {
         std::cout << SDL_GetError() << std::endl;

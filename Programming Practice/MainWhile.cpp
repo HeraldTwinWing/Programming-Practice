@@ -37,8 +37,17 @@ void MainWhile::onExecute()
 
 void MainWhile::onUpdata()
 {
+    lastTime = thisTime;
+    thisTime = SDL_GetTicks();
+    deltaTime = thisTime - lastTime;
+    map->refresh();
     player1->refresh(deltaTime);
     player2->refresh(deltaTime);
+    
+    for (auto i : bombs)
+    {
+        i->refresh();
+    }
     mainWindow->refresh();
 }
 

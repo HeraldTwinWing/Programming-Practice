@@ -144,7 +144,6 @@
     <ClCompile Include="MainWhile.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Window.cpp" />
-    <ClCompile Include="源.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bomb.h" />

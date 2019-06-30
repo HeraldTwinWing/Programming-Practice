@@ -6,14 +6,14 @@ Character* player2;
 Character::Character() :moving(), moveTemp()
 {
     //std::ifstream input("data/characterData");
-    pos = { 20, 20 };
+    pos = { 20, 60 };
+    mapPos = { 0, 0 };
     speed = 40;
     bombPower = 1;
     maxBombPower = 1;
     bombNum = 1;
     maxBombNum = 1;
-    texture = SDL_CreateTextureFromSurface(mainWindow->getRender()
-        , IMG_Load("picture/character.png"));
+    texture = mainWindow->loadPicture("player.png");
     texturePos = { pos.x, pos.y , 44, 56 };
 
     for (auto& i : moving)
@@ -26,11 +26,12 @@ SDL_Point Character::getMapPos()
 {
     SDL_Point result = { 0, 0 };
     result.x = (int)(pos.x / 40);
-    result.y = (int)(pos.y / 40);
-    if (pos.x % 40)
-        ++result.x;
-    if (pos.y % 40)
-        ++result.y;
+    result.y = (int)((pos.y - 40) / 40);
+    /*   if (pos.x % 40)
+           ++result.x;
+       if (pos.y % 40)
+           ++result.y;
+           */
     return result;
 }
 
@@ -38,9 +39,11 @@ void Character::refresh(double deltaTime)
 {
     move(deltaTime);
 
-    texturePos.x = pos.x + 28;
-    texturePos.y = pos.y + 18;
-    std::cout << pos.x << " " << pos.y << std::endl;
+    texturePos.x = pos.x - 22;
+    texturePos.y = pos.y - 50;
+    mapPos = getMapPos();
+    //std::cout << pos.x << " " << pos.y << std::endl;
+    std::cout << "map pos:" << mapPos.x << " " << mapPos.y << std::endl;
     SDL_RenderCopy(mainWindow->getRender(), texture, nullptr, &texturePos);
 }
 
@@ -52,7 +55,7 @@ void Character::move(double deltaTime)
 
     for (int i = 0; i < 4; i++)
     {
-        double displacement = deltaTime * speed;
+        double displacement = deltaTime * speed / 1000;
         int v1 = i + 1;
         if (v1 > 3)
             v1 = 0;
@@ -61,51 +64,157 @@ void Character::move(double deltaTime)
         if (v2 < 0)
             v1 = 3;
 
-        switch (i)
+        if (moving[i])
         {
-        case 0:
-            if (pos.x % 40 >= 15 &&
-                pos.x % 40 <= 25 &&
-                mapObj.judgeBlockType(pos.x, pos.y - 1) == EMPTY)
-                moveTemp[1] -= displacement;
-            else if (pos.x % 40 < 15 &&
-                mapObj.judgeBlockType(pos.x - 1, pos.y - 1) == EMPTY)
-                moveTemp[0] -= displacement;
-            else if (pos.x % 40 > 25 &&
-                mapObj.judgeBlockType(pos.x + 1, pos.y - 1) == EMPTY)
-                moveTemp[0] += displacement;
-            break;
-        case 1:
-            if (pos.y % 40 >= 15 &&
-                pos.y % 40 <= 25 &&
-                mapObj.judgeBlockType(pos.x + 1, pos.y) == EMPTY)
-                moveTemp[0] += displacement;
-            else if (pos.y % 40 < 15 &&
-                mapObj.judgeBlockType(pos.x + 1, pos.y - 1) == EMPTY)
-                moveTemp[1] -= displacement;
-            else if (pos.y % 40 > 25 &&
-                mapObj.judgeBlockType(pos.x + 1, pos.y + 1) == EMPTY)
-                moveTemp[1] += displacement;
-            break;
-        case 2:
-            if (pos.x % 40 >= 15 &&
-                pos.x % 40 <= 25 &&
-                mapObj.judgeBlockType(pos.x, pos.y + 1) == EMPTY)
-                moveTemp[1] += displacement;
-            else if (pos.x % 40 < 15 &&
-                mapObj.judgeBlockType(pos.x - 1, pos.y + 1) == EMPTY)
-                moveTemp[0] -= displacement;
-            else if (pos.x % 40 > 25 &&
-                mapObj.judgeBlockType(pos.x + 1, pos.y + 1) == EMPTY)
-                moveTemp[0] += displacement;
-            break;
-        case 3:
-            if ((pos.y % 40) < 15)
-                moveTemp[1] -= displacement;
-            else if ((pos.y % 40) > 25)
-                moveTemp[1] += displacement;
-            else
-                moveTemp[0] -= displacement;
+            switch (i)
+            {
+
+            case 0:
+                if ((pos.y % 40 >= 20 ||
+                    mapObj.judgeBlockType(mapPos.x, mapPos.y - 1) >= EMPTY) &&
+                    pos.x % 40 == 20)
+                    moveTemp[1] -= displacement;
+                else if (pos.x % 40 < 20)
+                {
+                    if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y - 1) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x, mapPos.y - 1) < EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x - 1, mapPos.y) >= EMPTY)
+                    {
+                        moveTemp[0] -= displacement;
+                    }
+                    if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y - 1) < EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x, mapPos.y - 1) >= EMPTY)
+                    {
+                        moveTemp[0] += displacement;
+                    }
+                }
+                else if (pos.x % 40 > 20)
+                {
+                    if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y - 1) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x, mapPos.y - 1) < EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x + 1, mapPos.y) >= EMPTY)
+                    {
+                        moveTemp[0] += displacement;
+                    }
+                    if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y - 1) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x, mapPos.y - 1) < EMPTY)
+                    {
+                        moveTemp[0] -= displacement;
+                    }
+                }
+
+
+                break;
+            case 1:
+                if ((pos.x % 40 <= 20 ||
+                    mapObj.judgeBlockType(mapPos.x + 1, mapPos.y) >= EMPTY) &&
+                    pos.y % 40 == 20)
+                    moveTemp[0] += displacement;
+                else if (pos.y % 40 < 20)
+                {
+                    if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y - 1) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x + 1, mapPos.y) < EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x, mapPos.y - 1) >= EMPTY)
+                    {
+                        moveTemp[1] -= displacement;
+                    }
+                    if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y - 1) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x + 1, mapPos.y) < EMPTY)
+                    {
+                        moveTemp[1] += displacement;
+                    }
+                }
+
+
+                else if (pos.y % 40 > 20)
+                {
+                    if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y + 1) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x + 1, mapPos.y) < EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x, mapPos.y + 1) >= EMPTY)
+                    {
+                        moveTemp[1] += displacement;
+                    }
+                    if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y + 1) < EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x + 1, mapPos.y) >= EMPTY)
+                    {
+                        moveTemp[1] -= displacement;
+                    }
+                }
+                break;
+            case 2:
+                if ((pos.y % 40 <= 20 ||
+                    mapObj.judgeBlockType(mapPos.x, mapPos.y + 1) >= EMPTY) &&
+                    pos.x % 40 == 20)
+                    moveTemp[1] += displacement;
+                else if (pos.x % 40 < 20)
+                {
+                    if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y + 1) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x, mapPos.y + 1) < EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x - 1, mapPos.y) >= EMPTY)
+                    {
+                        moveTemp[0] -= displacement;
+                    }
+                    if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y + 1) < EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x, mapPos.y + 1) >= EMPTY)
+                    {
+                        moveTemp[0] += displacement;
+                    }
+
+                }
+                else if (pos.x % 40 > 20)
+                {
+                    if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y + 1) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x, mapPos.y + 1) < EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x + 1, mapPos.y) >= EMPTY)
+                    {
+                        moveTemp[0] += displacement;
+                    }
+                    if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y + 1) < EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x, mapPos.y + 1) >= EMPTY)
+                    {
+                        moveTemp[0] -= displacement;
+                    }
+                }
+
+
+                break;
+            case 3:
+                if ((pos.x % 40 >= 20 ||
+                    mapObj.judgeBlockType(mapPos.x - 1, mapPos.y) >= EMPTY) &&
+                    pos.y % 40 == 20)
+                {
+                    moveTemp[0] -= displacement;
+                }
+                else if (pos.y % 40 < 20)
+                {
+                    if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y - 1) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x - 1, mapPos.y) < EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x, mapPos.y - 1) >= EMPTY)
+                    {
+                        moveTemp[1] -= displacement;
+                    }
+                    if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y - 1) < EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x - 1, mapPos.y) >= EMPTY)
+                    {
+                        moveTemp[1] += displacement;
+                    }
+                }
+                else if (pos.y % 40 > 20)
+                {
+                    if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y + 1) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x - 1, mapPos.y) < EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x, mapPos.y + 1) >= EMPTY)
+                    {
+                        moveTemp[1] += displacement;
+                    }
+                    if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y + 1) < EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x - 1, mapPos.y) >= EMPTY)
+                    {
+                        moveTemp[1] -= displacement;
+                    }
+                }
+
+            }
         }
     }
 
@@ -150,6 +259,7 @@ void Character::p2KeyDownEvent(SDL_Keycode sym)
         moving[3] = false;
         break;
     case SDLK_KP_ENTER:
+        bombs.push_back( new Bomb{ bombPower, mapPos });
         break;
     default:
         break;
@@ -185,6 +295,7 @@ void Character::p1KeyDownEvent(SDL_Keycode sym)
         moving[3] = false;
         break;
     case SDLK_SPACE:
+        bombs.push_back( new Bomb{ bombPower, mapPos });
         break;
     default:
         break;
@@ -199,13 +310,13 @@ void Character::p2KeyUpEvent(SDL_Keycode sym)
         moving[0] = false;
         break;
     case SDLK_DOWN:
-        moving[1] = false;
-        break;
-    case SDLK_LEFT:
         moving[2] = false;
         break;
-    case SDLK_RIGHT:
+    case SDLK_LEFT:
         moving[3] = false;
+        break;
+    case SDLK_RIGHT:
+        moving[1] = false;
         break;
     default:
         break;
@@ -220,13 +331,13 @@ void Character::p1KeyUpEvent(SDL_Keycode sym)
         moving[0] = false;
         break;
     case SDLK_s:
-        moving[1] = false;
-        break;
-    case SDLK_a:
         moving[2] = false;
         break;
-    case SDLK_d:
+    case SDLK_a:
         moving[3] = false;
+        break;
+    case SDLK_d:
+        moving[1] = false;
         break;
     default:
         break;
