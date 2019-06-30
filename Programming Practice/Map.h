@@ -1,4 +1,5 @@
 #pragma once
+#include<SDL.h>
 #include <array>
 #include <string>
 #include <utility>
@@ -15,7 +16,8 @@ private:
     std::array<std::array<BlockTypeEnum, 15>, 13> map;  //访问方式map[y][x]
     std::array<std::array<double, 15>, 13> timeBuff;
 public:
-    Map();
+	Map();
+	bool Judge(int x, int y);
 
     std::array<std::array<BlockTypeEnum, 15>, 13>& getMap();
     
@@ -26,8 +28,10 @@ public:
     //从文件加载地图
     void loadMap();
 
-    //刷新地图图像
-    void refresh();
+	//刷新地图图像
+	void refresh(int x, int y, bool boom);
+	void Bomb_change(int x, int y);//
+
 };
 
 extern Map* map;

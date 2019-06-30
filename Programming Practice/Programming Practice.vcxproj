@@ -132,6 +132,7 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -143,6 +144,7 @@
     <ClCompile Include="MainWhile.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Window.cpp" />
+    <ClCompile Include="源.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bomb.h" />
@@ -151,7 +153,14 @@
     <ClInclude Include="GameEvent.h" />
     <ClInclude Include="MainWhile.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Programming Practice.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="mapdata.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
