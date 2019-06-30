@@ -8,6 +8,8 @@ AI::AI(std::string textureName, int x, int y, int rad, double speed, int bombnum
 	this->radiation = rad;
 	this->moveSpeed = speed;
 	this->restBombNum = bombnum;
+	this->currentLine = x_coordinate % 40 + 1;
+	this->currentRow = y_coordinate % 40 + 1;
 }
 
 void AI::moveAI()
@@ -34,3 +36,9 @@ void AI::detectBomb()
 {
 
 }
+
+void AI::findWay()
+{
+	for 
+}
+
