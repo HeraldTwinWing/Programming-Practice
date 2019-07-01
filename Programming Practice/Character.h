@@ -17,6 +17,7 @@ private:
     int speed;
     double moveTemp[2]; //保存位移的小数部分 [x,y]
     bool moving[4];     //[上，右，下，左]
+    bool dead;
 
     int bombPower;
     int maxBombPower;

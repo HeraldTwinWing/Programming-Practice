@@ -8,13 +8,14 @@ Character::Character() :moving(), moveTemp()
     //std::ifstream input("data/characterData");
     pos = { 20, 60 };
     mapPos = { 0, 0 };
-    speed = 40;
+    speed = 100;
     bombPower = 1;
     maxBombPower = 1;
     bombNum = 1;
     maxBombNum = 1;
     texture = mainWindow->loadPicture("player.png");
     texturePos = { pos.x, pos.y , 44, 56 };
+    dead = false;
 
     for (auto& i : moving)
         i = false;
@@ -26,7 +27,14 @@ SDL_Point Character::getMapPos()
 {
     SDL_Point result = { 0, 0 };
     result.x = (int)(pos.x / 40);
-    result.y = (int)((pos.y - 40) / 40);
+    if (pos.y - 40 < 0)
+    {
+        result.y = -1;
+    }
+    else
+    {
+        result.y = (int)((pos.y - 40) / 40);
+    }
     /*   if (pos.x % 40)
            ++result.x;
        if (pos.y % 40)
@@ -38,12 +46,16 @@ SDL_Point Character::getMapPos()
 void Character::refresh(double deltaTime)
 {
     move(deltaTime);
+    mapPos = getMapPos();
+    if (map->judgeBlockType(mapPos.x, mapPos.y) == DANGER)  //»÷°ÜÅÐ¶¨
+    {
+        dead = true;
+    }
 
     texturePos.x = pos.x - 22;
     texturePos.y = pos.y - 50;
-    mapPos = getMapPos();
     //std::cout << pos.x << " " << pos.y << std::endl;
-    std::cout << "map pos:" << mapPos.x << " " << mapPos.y << std::endl;
+    //std::cout << "map pos:" << mapPos.x << " " << mapPos.y << std::endl;
     SDL_RenderCopy(mainWindow->getRender(), texture, nullptr, &texturePos);
 }
 
@@ -77,12 +89,23 @@ void Character::move(double deltaTime)
                 else if (pos.x % 40 < 20)
                 {
                     if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y - 1) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x, mapPos.y - 1) >= EMPTY)
+                    {
+                        moveTemp[1] -= displacement;
+                    }
+                    else if (mapObj.judgeBlockType(mapPos.x, mapPos.y) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x - 1, mapPos.y) >= EMPTY &&
+                        pos.y  % 40 > 20)
+                    {
+                        moveTemp[1] -= displacement;
+                    }
+                    else if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y - 1) >= EMPTY &&
                         mapObj.judgeBlockType(mapPos.x, mapPos.y - 1) < EMPTY &&
                         mapObj.judgeBlockType(mapPos.x - 1, mapPos.y) >= EMPTY)
                     {
                         moveTemp[0] -= displacement;
                     }
-                    if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y - 1) < EMPTY &&
+                    else if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y - 1) < EMPTY &&
                         mapObj.judgeBlockType(mapPos.x, mapPos.y - 1) >= EMPTY)
                     {
                         moveTemp[0] += displacement;
@@ -91,19 +114,28 @@ void Character::move(double deltaTime)
                 else if (pos.x % 40 > 20)
                 {
                     if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y - 1) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x, mapPos.y - 1) >= EMPTY)
+                    {
+                        moveTemp[1] -= displacement;
+                    }
+                    else if (mapObj.judgeBlockType(mapPos.x, mapPos.y) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x + 1, mapPos.y) >= EMPTY &&
+                        pos.y % 40 > 20)
+                    {
+                        moveTemp[1] -= displacement;
+                    }
+                    else if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y - 1) >= EMPTY &&
                         mapObj.judgeBlockType(mapPos.x, mapPos.y - 1) < EMPTY &&
                         mapObj.judgeBlockType(mapPos.x + 1, mapPos.y) >= EMPTY)
                     {
                         moveTemp[0] += displacement;
                     }
-                    if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y - 1) >= EMPTY &&
-                        mapObj.judgeBlockType(mapPos.x, mapPos.y - 1) < EMPTY)
+                    else if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y - 1) < EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x, mapPos.y - 1) >= EMPTY)
                     {
                         moveTemp[0] -= displacement;
                     }
                 }
-
-
                 break;
             case 1:
                 if ((pos.x % 40 <= 20 ||
@@ -113,13 +145,24 @@ void Character::move(double deltaTime)
                 else if (pos.y % 40 < 20)
                 {
                     if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y - 1) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x + 1, mapPos.y) >= EMPTY)
+                    {
+                        moveTemp[0] += displacement;
+                    }
+                    else if (mapObj.judgeBlockType(mapPos.x, mapPos.y) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x, mapPos.y - 1) >= EMPTY &&
+                        pos.x % 40 < 20)
+                    {
+                        moveTemp[0] += displacement;
+                    }
+                    else if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y - 1) >= EMPTY &&
                         mapObj.judgeBlockType(mapPos.x + 1, mapPos.y) < EMPTY &&
                         mapObj.judgeBlockType(mapPos.x, mapPos.y - 1) >= EMPTY)
                     {
                         moveTemp[1] -= displacement;
                     }
-                    if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y - 1) >= EMPTY &&
-                        mapObj.judgeBlockType(mapPos.x + 1, mapPos.y) < EMPTY)
+                    else if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y - 1) < EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x + 1, mapPos.y) >= EMPTY)
                     {
                         moveTemp[1] += displacement;
                     }
@@ -129,12 +172,23 @@ void Character::move(double deltaTime)
                 else if (pos.y % 40 > 20)
                 {
                     if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y + 1) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x + 1, mapPos.y) >= EMPTY)
+                    {
+                        moveTemp[0] += displacement;
+                    }
+                    else if (mapObj.judgeBlockType(mapPos.x, mapPos.y) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x, mapPos.y + 1) >= EMPTY &&
+                        pos.x % 40 < 20)
+                    {
+                        moveTemp[0] += displacement;
+                    }
+                    else if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y + 1) >= EMPTY &&
                         mapObj.judgeBlockType(mapPos.x + 1, mapPos.y) < EMPTY &&
                         mapObj.judgeBlockType(mapPos.x, mapPos.y + 1) >= EMPTY)
                     {
                         moveTemp[1] += displacement;
                     }
-                    if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y + 1) < EMPTY &&
+                    else if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y + 1) < EMPTY &&
                         mapObj.judgeBlockType(mapPos.x + 1, mapPos.y) >= EMPTY)
                     {
                         moveTemp[1] -= displacement;
@@ -142,19 +196,30 @@ void Character::move(double deltaTime)
                 }
                 break;
             case 2:
-                if ((pos.y % 40 <= 20 ||
+                if ((pos.y % 40 <= 20 ||                                                
                     mapObj.judgeBlockType(mapPos.x, mapPos.y + 1) >= EMPTY) &&
                     pos.x % 40 == 20)
                     moveTemp[1] += displacement;
                 else if (pos.x % 40 < 20)
                 {
                     if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y + 1) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x, mapPos.y + 1) >= EMPTY)
+                    {
+                        moveTemp[1] += displacement;
+                    }
+                    else if (mapObj.judgeBlockType(mapPos.x, mapPos.y) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x - 1, mapPos.y) >= EMPTY &&
+                        pos.y % 40 < 20)
+                    {
+                        moveTemp[1] += displacement;
+                    }
+                    else if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y + 1) >= EMPTY &&
                         mapObj.judgeBlockType(mapPos.x, mapPos.y + 1) < EMPTY &&
                         mapObj.judgeBlockType(mapPos.x - 1, mapPos.y) >= EMPTY)
                     {
                         moveTemp[0] -= displacement;
                     }
-                    if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y + 1) < EMPTY &&
+                    else if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y + 1) < EMPTY &&
                         mapObj.judgeBlockType(mapPos.x, mapPos.y + 1) >= EMPTY)
                     {
                         moveTemp[0] += displacement;
@@ -164,19 +229,28 @@ void Character::move(double deltaTime)
                 else if (pos.x % 40 > 20)
                 {
                     if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y + 1) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x, mapPos.y + 1) >= EMPTY)
+                    {
+                    moveTemp[1] += displacement;
+                    }
+                    else if (mapObj.judgeBlockType(mapPos.x, mapPos.y) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x + 1, mapPos.y) >= EMPTY &&
+                        pos.y % 40 < 20)
+                    {
+                        moveTemp[1] += displacement;
+                    }
+                    else if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y + 1) >= EMPTY &&
                         mapObj.judgeBlockType(mapPos.x, mapPos.y + 1) < EMPTY &&
                         mapObj.judgeBlockType(mapPos.x + 1, mapPos.y) >= EMPTY)
                     {
                         moveTemp[0] += displacement;
                     }
-                    if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y + 1) < EMPTY &&
+                    else if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y + 1) < EMPTY &&
                         mapObj.judgeBlockType(mapPos.x, mapPos.y + 1) >= EMPTY)
                     {
                         moveTemp[0] -= displacement;
                     }
                 }
-
-
                 break;
             case 3:
                 if ((pos.x % 40 >= 20 ||
@@ -188,12 +262,23 @@ void Character::move(double deltaTime)
                 else if (pos.y % 40 < 20)
                 {
                     if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y - 1) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x - 1, mapPos.y) >= EMPTY)
+                    {
+                        moveTemp[0] -= displacement;
+                    }
+                    else if (mapObj.judgeBlockType(mapPos.x, mapPos.y) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x, mapPos.y - 1) >= EMPTY &&
+                        pos.x % 40 > 20)
+                    {
+                        moveTemp[0] -= displacement;
+                    }
+                    else if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y - 1) >= EMPTY &&
                         mapObj.judgeBlockType(mapPos.x - 1, mapPos.y) < EMPTY &&
                         mapObj.judgeBlockType(mapPos.x, mapPos.y - 1) >= EMPTY)
                     {
                         moveTemp[1] -= displacement;
                     }
-                    if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y - 1) < EMPTY &&
+                    else if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y - 1) < EMPTY &&
                         mapObj.judgeBlockType(mapPos.x - 1, mapPos.y) >= EMPTY)
                     {
                         moveTemp[1] += displacement;
@@ -202,12 +287,23 @@ void Character::move(double deltaTime)
                 else if (pos.y % 40 > 20)
                 {
                     if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y + 1) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x - 1, mapPos.y) >= EMPTY)
+                    {
+                        moveTemp[0] -= displacement;
+                    }
+                    else if (mapObj.judgeBlockType(mapPos.x, mapPos.y) >= EMPTY &&
+                        mapObj.judgeBlockType(mapPos.x, mapPos.y + 1) >= EMPTY &&
+                        pos.x % 40 > 20)
+                    {
+                        moveTemp[0] -= displacement;
+                    }
+                    else if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y + 1) >= EMPTY &&
                         mapObj.judgeBlockType(mapPos.x - 1, mapPos.y) < EMPTY &&
                         mapObj.judgeBlockType(mapPos.x, mapPos.y + 1) >= EMPTY)
                     {
                         moveTemp[1] += displacement;
                     }
-                    if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y + 1) < EMPTY &&
+                    else if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y + 1) < EMPTY &&
                         mapObj.judgeBlockType(mapPos.x - 1, mapPos.y) >= EMPTY)
                     {
                         moveTemp[1] -= displacement;
@@ -258,8 +354,12 @@ void Character::p2KeyDownEvent(SDL_Keycode sym)
         moving[2] = false;
         moving[3] = false;
         break;
-    case SDLK_KP_ENTER:
-        bombs.push_back( new Bomb{ bombPower, mapPos });
+    case SDLK_RETURN:
+        if (p2Bombs.size() < bombNum)
+        {
+            p2Bombs.push_back(new Bomb{ bombPower, mapPos });
+            map->setBombBlock(mapPos.x, mapPos.y);
+        }
         break;
     default:
         break;
@@ -295,7 +395,11 @@ void Character::p1KeyDownEvent(SDL_Keycode sym)
         moving[3] = false;
         break;
     case SDLK_SPACE:
-        bombs.push_back( new Bomb{ bombPower, mapPos });
+        if (p1Bombs.size() < bombNum)
+        {
+            p1Bombs.push_back(new Bomb{ bombPower, mapPos });
+            map->setBombBlock(mapPos.x, mapPos.y);
+        }
         break;
     default:
         break;

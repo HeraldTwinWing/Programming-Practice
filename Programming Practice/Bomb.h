@@ -11,12 +11,15 @@ private:
     SDL_Point pos;
     SDL_Texture* texture;
     double placeTime;
+    bool boomed;
 public:
     explicit Bomb(int power, SDL_Point pos);
 
     void boom();
+    bool isBoomed();
 
     void refresh();
 };
 
-extern std::deque<Bomb*> bombs;
+extern std::deque<Bomb*> p1Bombs;
+extern std::deque<Bomb*> p2Bombs;

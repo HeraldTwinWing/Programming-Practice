@@ -13,7 +13,7 @@ std::array<std::array<BlockTypeEnum, 15>, 13> & Map::getMap()
 
 BlockTypeEnum Map::judgeBlockType(int x, int y)
 {
-    if (x > 15 || x < 0 || y> 13 || y < 0)
+    if (x >= 15 || x < 0 || y >= 13 || y < 0)
         return OUTRANGE;
 
     return map[y][x];
@@ -22,6 +22,17 @@ BlockTypeEnum Map::judgeBlockType(int x, int y)
 BlockTypeEnum& Map::getBlockReference(int x, int y)
 {
     return map[y][x];
+}
+
+void Map::setBombBlock(int x, int y)
+{
+    map[y][x] = BOMB;
+}
+
+void Map::setDangerBlock(int x, int y)
+{
+    map[y][x] = DANGER;
+    timeBuff[y][x] = SDL_GetTicks();
 }
 
 bool Map::destruct(int x, int y)
@@ -45,6 +56,12 @@ bool Map::destruct(int x, int y)
         return true;
     }
     return false;
+}
+
+void Map::destructBlock(int x, int y)
+{
+    if (judgeBlockType(x,y) == DESTRUCTIBLE)
+        map[y][x] = EMPTY;
 }
 
 
@@ -112,12 +129,20 @@ void Map::Bomb_change(int x, int y) {
 }
 
 //刷新地图图像
-void Map::refresh()
+void Map::refresh(double deltaTime)
 {
     for (unsigned int i = 0; i < map.max_size(); i++)
     {
         for (unsigned int j = 0; j < map[i].max_size(); j++)
         {
+            if (map[i][j] == DANGER)        //爆炸区域存在0.5后变回空块
+            {
+                if (SDL_GetTicks() - timeBuff[i][j] > 500)
+                {
+                    map[i][j] = EMPTY;
+                }
+            }
+
             SDL_Rect emptyTexturePos = { j * 40, (i + 1) * 40, 40, 40 };
             SDL_Rect destructibleTexturePos = { j * 40 , (i + 1) * 40 - 11, 40, 51 };
             SDL_Rect undestructibleTexturePos = { j * 40 , (i + 1) * 40 - 40, 40, 80 };

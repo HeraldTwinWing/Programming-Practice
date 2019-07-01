@@ -10,6 +10,7 @@ public:
     MainWhile();
     void onExecute();
     void onUpdata();
+    void bombsUpdata();
 
     ~MainWhile();
 

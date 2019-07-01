@@ -20,7 +20,7 @@ SDL_Renderer* Window::getRender()
 
 SDL_Texture* Window::loadPicture(const std::string& filename)
 {
-    if (textures.find(filename) != textures.end())
+    if (textures.find(filename) != textures.end() && textures[filename] != nullptr)
     {
         return textures[filename];
     }

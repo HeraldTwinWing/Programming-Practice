@@ -24,15 +24,17 @@ public:
     
     BlockTypeEnum judgeBlockType(int x, int y);
     BlockTypeEnum& getBlockReference(int x, int y);     //防止混淆的访问方式
-    
+    void setBombBlock(int x, int y);
+    void setDangerBlock(int x, int y);
 
     bool destruct(int x, int y);
+    void destructBlock(int x, int y);
 
     //从文件加载地图
     void loadMap();
 
 	//刷新地图图像
-	void refresh();
+	void refresh(double deltaTime);
 	void Bomb_change(int x, int y);//
 
 };
