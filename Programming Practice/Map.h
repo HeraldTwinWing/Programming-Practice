@@ -8,7 +8,12 @@
 
 enum BlockTypeEnum
 {
-     OUTRANGE = -1, DESTRUCTIBLE, UNDESTRUCTIBLE, BOMB, EMPTY, DANGER
+     OUTRANGE = -1,     //地图外
+     DESTRUCTIBLE,      //可破坏方块
+     UNDESTRUCTIBLE,    //不可破坏方块
+     BOMB,              //炸弹 
+     EMPTY,             //空地 
+     DANGER             //爆炸区域
 };
 
 class Map

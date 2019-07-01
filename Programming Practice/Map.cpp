@@ -77,10 +77,11 @@ void Map::loadMap()
         exit(2);
     }
     char ch;
-    for (int i = 0; i < 13 && !file.eof(); i++) {
-        for (int j = 0; j < 15; j++) {
-            ch = file.get();
-            switch (ch)
+    for (int i = 0; i < 13; i++) {
+        std::string line;
+        file >> line;
+        for (int j = 0; j < line.size(); j++) {
+            switch (line[j])
             {
             case '0':map[i][j] = DESTRUCTIBLE;
                 break;
@@ -99,7 +100,6 @@ void Map::loadMap()
     }
     file.close();
     return;
-
 }
 
 

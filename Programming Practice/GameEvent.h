@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL.h>
 #include "Character.h"
+#include "RestartButton.h"
 
 class GameEvent
 {

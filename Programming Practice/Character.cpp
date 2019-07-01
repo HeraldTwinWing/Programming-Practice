@@ -3,24 +3,43 @@
 Character* player1;
 Character* player2;
 
+int Character::playerNum = 0;
+
 Character::Character() :moving(), moveTemp()
 {
-    //std::ifstream input("data/characterData");
-    pos = { 20, 60 };
-    mapPos = { 0, 0 };
-    speed = 100;
-    bombPower = 1;
-    maxBombPower = 1;
-    bombNum = 1;
-    maxBombNum = 1;
-    texture = mainWindow->loadPicture("player.png");
-    texturePos = { pos.x, pos.y , 44, 56 };
+    speed = 200;
+    bombPower = 4;
+    maxBombPower = 4;
+    bombNum = 4;
+    maxBombNum = 4;
     dead = false;
+    if (playerNum == 0)
+    {
+        pos = { 20, 60 };
+        mapPos = { 0, 0 };
+        texture = mainWindow->loadPicture("player1.png");
+        deadTexture = mainWindow->loadPicture("player1_dead.png");
+        texturePos = { pos.x, pos.y , 44, 56 };
+    }
+    else
+    {
+        pos = { 580 , 520 };
+        mapPos = { 14, 12 };
+        texture = mainWindow->loadPicture("player2.png");
+        deadTexture = mainWindow->loadPicture("player2_dead.png");
+        texturePos = { pos.x, pos.y, 44, 56 };
+    }
 
     for (auto& i : moving)
         i = false;
     for (auto& i : moveTemp)
         i = 0;
+
+    ++playerNum;
+    if (playerNum > 1)
+    {
+        playerNum = 0;
+    }
 }
 
 SDL_Point Character::getMapPos()
@@ -56,8 +75,17 @@ void Character::refresh(double deltaTime)
     texturePos.y = pos.y - 50;
     //std::cout << pos.x << " " << pos.y << std::endl;
     //std::cout << "map pos:" << mapPos.x << " " << mapPos.y << std::endl;
-    SDL_RenderCopy(mainWindow->getRender(), texture, nullptr, &texturePos);
+    if (dead)
+    {
+        SDL_RenderCopy(mainWindow->getRender(), deadTexture, nullptr, &texturePos);
+    }
+    else
+    {
+        SDL_RenderCopy(mainWindow->getRender(), texture, nullptr, &texturePos);
+    }
 }
+
+Character::~Character() = default;
 
 void Character::move(double deltaTime)
 {
@@ -65,6 +93,10 @@ void Character::move(double deltaTime)
     SDL_Point mapPos = getMapPos();
     auto& map = mapObj.getMap();
 
+    if (dead)
+    {
+        return;
+    }
     for (int i = 0; i < 4; i++)
     {
         double displacement = deltaTime * speed / 1000;
@@ -86,26 +118,26 @@ void Character::move(double deltaTime)
                     mapObj.judgeBlockType(mapPos.x, mapPos.y - 1) >= EMPTY) &&
                     pos.x % 40 == 20)
                     moveTemp[1] -= displacement;
-                else if (pos.x % 40 < 20)
+                else if (pos.x % 40 < 20)   
                 {
-                    if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y - 1) >= EMPTY &&
+                    if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y - 1) >= EMPTY &&   //移动方向上有两个空格
                         mapObj.judgeBlockType(mapPos.x, mapPos.y - 1) >= EMPTY)
                     {
                         moveTemp[1] -= displacement;
                     }
-                    else if (mapObj.judgeBlockType(mapPos.x, mapPos.y) >= EMPTY &&
+                    else if (mapObj.judgeBlockType(mapPos.x, mapPos.y) >= EMPTY &&      //移动方向上有两个空格
                         mapObj.judgeBlockType(mapPos.x - 1, mapPos.y) >= EMPTY &&
-                        pos.y  % 40 > 20)
+                        pos.y % 40 > 20)
                     {
                         moveTemp[1] -= displacement;
                     }
-                    else if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y - 1) >= EMPTY &&
+                    else if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y - 1) >= EMPTY &&  //撞墙时垂直移动方向平移
                         mapObj.judgeBlockType(mapPos.x, mapPos.y - 1) < EMPTY &&
                         mapObj.judgeBlockType(mapPos.x - 1, mapPos.y) >= EMPTY)
                     {
                         moveTemp[0] -= displacement;
                     }
-                    else if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y - 1) < EMPTY &&
+                    else if (mapObj.judgeBlockType(mapPos.x - 1, mapPos.y - 1) < EMPTY &&   //撞墙时垂直移动方向平移
                         mapObj.judgeBlockType(mapPos.x, mapPos.y - 1) >= EMPTY)
                     {
                         moveTemp[0] += displacement;
@@ -196,7 +228,7 @@ void Character::move(double deltaTime)
                 }
                 break;
             case 2:
-                if ((pos.y % 40 <= 20 ||                                                
+                if ((pos.y % 40 <= 20 ||
                     mapObj.judgeBlockType(mapPos.x, mapPos.y + 1) >= EMPTY) &&
                     pos.x % 40 == 20)
                     moveTemp[1] += displacement;
@@ -231,7 +263,7 @@ void Character::move(double deltaTime)
                     if (mapObj.judgeBlockType(mapPos.x + 1, mapPos.y + 1) >= EMPTY &&
                         mapObj.judgeBlockType(mapPos.x, mapPos.y + 1) >= EMPTY)
                     {
-                    moveTemp[1] += displacement;
+                        moveTemp[1] += displacement;
                     }
                     else if (mapObj.judgeBlockType(mapPos.x, mapPos.y) >= EMPTY &&
                         mapObj.judgeBlockType(mapPos.x + 1, mapPos.y) >= EMPTY &&
@@ -309,11 +341,11 @@ void Character::move(double deltaTime)
                         moveTemp[1] -= displacement;
                     }
                 }
-
             }
         }
     }
 
+    //取整移动缓存，加到坐标上
     if (std::abs(moveTemp[0]) > 1)
     {
         pos.x += (int)std::trunc(moveTemp[0]);
@@ -355,7 +387,7 @@ void Character::p2KeyDownEvent(SDL_Keycode sym)
         moving[3] = false;
         break;
     case SDLK_RETURN:
-        if (p2Bombs.size() < bombNum)
+        if (p2Bombs.size() < bombNum && map->judgeBlockType(mapPos.x, mapPos.y) != BOMB)
         {
             p2Bombs.push_back(new Bomb{ bombPower, mapPos });
             map->setBombBlock(mapPos.x, mapPos.y);
@@ -364,6 +396,16 @@ void Character::p2KeyDownEvent(SDL_Keycode sym)
     default:
         break;
     }
+}
+
+bool Character::isNotDead()
+{
+    return !dead;
+}
+
+bool Character::isDead()
+{
+    return dead;
 }
 
 void Character::p1KeyDownEvent(SDL_Keycode sym)
@@ -395,7 +437,7 @@ void Character::p1KeyDownEvent(SDL_Keycode sym)
         moving[3] = false;
         break;
     case SDLK_SPACE:
-        if (p1Bombs.size() < bombNum)
+        if (p1Bombs.size() < bombNum && map->judgeBlockType(mapPos.x, mapPos.y) != BOMB)
         {
             p1Bombs.push_back(new Bomb{ bombPower, mapPos });
             map->setBombBlock(mapPos.x, mapPos.y);

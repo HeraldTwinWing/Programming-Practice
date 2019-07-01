@@ -2,6 +2,7 @@
 #include "MainWhile.h"
 
 MainWhile* mainWhile;
+GameStatusEnmu gameStatus = PLAYING;
 
 MainWhile::MainWhile()
 {
@@ -13,6 +14,7 @@ MainWhile::MainWhile()
     map = new Map();
     player1 = new Character();
     player2 = new Character();
+    restartButton = new RestartButton();
     map->loadMap();
 }
 
@@ -23,7 +25,7 @@ void MainWhile::onExecute()
     while (running)
     {
         static int frame = 0;
-        
+
         while (SDL_PollEvent(&event))
         {
             if (event.type == SDL_QUIT)
@@ -45,11 +47,28 @@ void MainWhile::onUpdata()
     deltaTime = thisTime - lastTime;
     map->refresh(deltaTime);
     bombsUpdata();
-    
+
     player1->refresh(deltaTime);
     player2->refresh(deltaTime);
-    
 
+    if (!(player1->isNotDead() && player2->isNotDead()))
+    {
+        restartButton->enable();
+        SDL_Rect resultPos = { 204 , 204, 192, 192 };
+        if (player1->isDead() && player2->isDead())
+        {
+            SDL_RenderCopy(mainWindow->getRender(), mainWindow->loadPicture("draw.png"), nullptr, &resultPos);
+        }
+        else if (player1->isDead())
+        {
+            SDL_RenderCopy(mainWindow->getRender(), mainWindow->loadPicture("p2win.png"), nullptr, &resultPos);
+        }
+        else if (player2->isDead())
+        {
+            SDL_RenderCopy(mainWindow->getRender(), mainWindow->loadPicture("p1win.png"), nullptr, &resultPos);
+        }
+    }
+    restartButton->refresh();
 
 
     mainWindow->refresh();

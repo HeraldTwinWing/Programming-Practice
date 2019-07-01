@@ -143,6 +143,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWhile.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="RestartButton.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -153,6 +154,7 @@
     <ClInclude Include="MainWhile.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="RestartButton.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

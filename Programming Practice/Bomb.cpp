@@ -15,9 +15,9 @@ Bomb::Bomb(int power, SDL_Point mapPos)
 void Bomb::boom()
 {
     map->setDangerBlock(pos.x, pos.y);
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 4; i++) //对应上下左右四个方向
     {
-        for (int j = 1; j <= power; j++)
+        for (int j = 1; j <= power; j++)    //直到被阻挡或达到范围上限为止，将对应方向上的方块设为爆炸区域
         {
             if (i == 0)
             {
@@ -60,6 +60,14 @@ void Bomb::boom()
     boomed = true;
 }
 
+void Bomb::chainBoom()
+{
+    if (map->judgeBlockType(pos.x, pos.y) == DANGER && !boomed)
+    {
+        boom();
+    }
+}
+
 bool Bomb::isBoomed()
 {
     return boomed;
@@ -67,10 +75,11 @@ bool Bomb::isBoomed()
 
 void Bomb::refresh()
 {
-    if (SDL_GetTicks() - placeTime > 1000)
+    if (SDL_GetTicks() - placeTime > 4000 && !boomed)  //引信时间4000ms
     {
         boom();
     }
+    chainBoom();
 
     SDL_Rect texturePos = { pos.x * 40, pos.y * 40 + 21, 38, 38 };
     SDL_RenderCopy(mainWindow->getRender(), texture, nullptr, &texturePos);
