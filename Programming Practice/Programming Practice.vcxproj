@@ -140,6 +140,7 @@
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="FileIO.cpp" />
     <ClCompile Include="GameEvent.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWhile.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -151,6 +152,7 @@
     <ClInclude Include="Character.h" />
     <ClInclude Include="FileIO.h" />
     <ClInclude Include="GameEvent.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="MainWhile.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="resource.h" />

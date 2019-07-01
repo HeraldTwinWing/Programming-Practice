@@ -21,6 +21,7 @@ public:
     void onExecute();
     void onUpdata();
     void bombsUpdata();
+    void itemsUpdata();
 
     ~MainWhile();
 

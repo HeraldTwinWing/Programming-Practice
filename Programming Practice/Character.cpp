@@ -3,11 +3,15 @@
 Character* player1;
 Character* player2;
 
+
+
+
 int Character::playerNum = 0;
 
 Character::Character() :moving(), moveTemp()
 {
-    speed = 200;
+    speed = 50;
+    maxSpeed = 250;
     bombPower = 4;
     maxBombPower = 4;
     bombNum = 4;
@@ -398,6 +402,24 @@ void Character::p2KeyDownEvent(SDL_Keycode sym)
     }
 }
 
+void Character::attributeUp(ItemEnum attri)
+{
+    switch (attri)
+    {
+    case POTION:
+        bombPower += 1;
+        break;
+    case BOMBITEM:
+        bombNum += 1;
+        break;
+    case SHOES:
+        speed += 50;
+        break;
+    default:
+        break;
+    }
+}
+
 bool Character::isNotDead()
 {
     return !dead;
@@ -406,6 +428,24 @@ bool Character::isNotDead()
 bool Character::isDead()
 {
     return dead;
+}
+
+bool Character::isAttributeReachesUpperLimit(ItemEnum attri)
+{
+    switch (attri)
+    {
+    case POTION:
+        return bombPower < maxBombPower;
+        break;
+    case BOMBITEM:
+        return bombNum < maxBombNum;
+        break;
+    case SHOES:
+        return speed < maxSpeed;
+        break;
+    default:
+        break;
+    }
 }
 
 void Character::p1KeyDownEvent(SDL_Keycode sym)

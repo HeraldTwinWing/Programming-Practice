@@ -113,6 +113,24 @@ void MainWhile::bombsUpdata()
     }
 }
 
+void MainWhile::itemsUpdata()
+{
+    for (auto& i : items)
+    {
+        i->refresh();
+    }
+
+
+}
+
 MainWhile::~MainWhile()
 {
+    for (int i = 0; i < items.size(); i++)
+    {
+        if (!items[i]->effective)
+        {
+            items.erase(items.begin() + i);
+            --i;
+        }
+    }
 }

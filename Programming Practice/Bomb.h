@@ -1,7 +1,9 @@
 #pragma once
 #include <SDL.h>
 #include <deque>
+#include <random>
 #include "Map.h"
+#include "Item.h"
 #include "Window.h"
 
 class Bomb
