@@ -10,6 +10,10 @@ MainWhile::MainWhile()
     deltaTime = 0;
     running = true;
     mainWindow = new Window();
+    map = new Map();
+    player1 = new Character();
+    player2 = new Character();
+    map->loadMap();
 }
 
 void MainWhile::onExecute()
@@ -27,8 +31,24 @@ void MainWhile::onExecute()
 
             eventHandler->OnEvent(event);
         }
-        mainWindow->refresh();
+        onUpdata();
     }
+}
+
+void MainWhile::onUpdata()
+{
+    lastTime = thisTime;
+    thisTime = SDL_GetTicks();
+    deltaTime = thisTime - lastTime;
+    map->refresh();
+    player1->refresh(deltaTime);
+    player2->refresh(deltaTime);
+    
+    for (auto i : bombs)
+    {
+        i->refresh();
+    }
+    mainWindow->refresh();
 }
 
 MainWhile::~MainWhile()
