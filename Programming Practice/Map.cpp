@@ -11,7 +11,7 @@ std::array<std::array<BlockTypeEnum, 15>, 13> & Map::getMap()
     return map;
 }
 
-BlockTypeEnum Map::judgeBlockType(int x, int y)
+BlockTypeEnum Map::judgeBlockType(int x, int y) //判断方格类型，包括界外
 {
     if (x >= 15 || x < 0 || y >= 13 || y < 0)
         return OUTRANGE;
@@ -58,7 +58,7 @@ bool Map::destruct(int x, int y)
     return false;
 }
 
-void Map::destructBlock(int x, int y)
+void Map::destructBlock(int x, int y)   //炸毁方块
 {
     if (judgeBlockType(x,y) == DESTRUCTIBLE)
         map[y][x] = EMPTY;
@@ -143,6 +143,7 @@ void Map::refresh(double deltaTime)
                 }
             }
 
+            //根据方格类型显示贴图
             SDL_Rect emptyTexturePos = { j * 40, (i + 1) * 40, 40, 40 };
             SDL_Rect destructibleTexturePos = { j * 40 , (i + 1) * 40 - 11, 40, 51 };
             SDL_Rect undestructibleTexturePos = { j * 40 , (i + 1) * 40 - 40, 40, 80 };

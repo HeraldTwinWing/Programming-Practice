@@ -45,13 +45,14 @@ void MainWhile::onUpdata()
     lastTime = thisTime;
     thisTime = SDL_GetTicks();
     deltaTime = thisTime - lastTime;
-    map->refresh(deltaTime);
-    bombsUpdata();
+
+    map->refresh(deltaTime);    //¸üÐÂµØÍ¼
+    bombsUpdata();              //Õ¨µ¯±¬Õ¨¼ì²â
 
     player1->refresh(deltaTime);
     player2->refresh(deltaTime);
 
-    if (!(player1->isNotDead() && player2->isNotDead()))
+    if (!(player1->isNotDead() && player2->isNotDead()))    //½áÊøÅÐ¶¨
     {
         restartButton->enable();
         SDL_Rect resultPos = { 204 , 204, 192, 192 };

@@ -16,7 +16,7 @@ public:
     explicit Bomb(int power, SDL_Point pos);
 
     void boom();
-    void chainBoom();
+    void chainBoom();   //Õ¨µ¯Á¬Ëø±¬Õ¨
     bool isBoomed();
 
     void refresh();

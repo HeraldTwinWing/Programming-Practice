@@ -13,7 +13,7 @@ Character::Character() :moving(), moveTemp()
     bombNum = 4;
     maxBombNum = 4;
     dead = false;
-    if (playerNum == 0)
+    if (playerNum == 0) //玩家1属性
     {
         pos = { 20, 60 };
         mapPos = { 0, 0 };
@@ -21,7 +21,7 @@ Character::Character() :moving(), moveTemp()
         deadTexture = mainWindow->loadPicture("player1_dead.png");
         texturePos = { pos.x, pos.y , 44, 56 };
     }
-    else
+    else                //玩家2属性
     {
         pos = { 580 , 520 };
         mapPos = { 14, 12 };
@@ -99,7 +99,8 @@ void Character::move(double deltaTime)
     }
     for (int i = 0; i < 4; i++)
     {
-        double displacement = deltaTime * speed / 1000;
+        double displacement = deltaTime * speed / 1000; //位移
+        /*
         int v1 = i + 1;
         if (v1 > 3)
             v1 = 0;
@@ -107,6 +108,7 @@ void Character::move(double deltaTime)
         int v2 = i - 1;
         if (v2 < 0)
             v1 = 3;
+        */
 
         if (moving[i])
         {
@@ -386,7 +388,7 @@ void Character::p2KeyDownEvent(SDL_Keycode sym)
         moving[2] = false;
         moving[3] = false;
         break;
-    case SDLK_RETURN:
+    case SDLK_RETURN:   //放置炸弹
         if (p2Bombs.size() < bombNum && map->judgeBlockType(mapPos.x, mapPos.y) != BOMB)
         {
             p2Bombs.push_back(new Bomb{ bombPower, mapPos });
