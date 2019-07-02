@@ -16,6 +16,10 @@ enum BlockTypeEnum
      DANGER             //爆炸区域
 };
 
+/** 地图
+ *  地图加载、显示和刷新
+ */
+
 class Map
 {
 private:

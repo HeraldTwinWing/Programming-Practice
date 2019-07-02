@@ -14,6 +14,9 @@ enum GameStatusEnmu
 
 extern GameStatusEnmu gameStatus;
 
+/** 主循环，游戏流程控制
+ */
+
 class MainWhile
 {
 public:

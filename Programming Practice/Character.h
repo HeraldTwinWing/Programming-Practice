@@ -7,6 +7,10 @@
 #include "Bomb.h"
 #include "Window.h"
 
+/** 角色
+ *  玩家可以通过键盘控制角色移动和放置炸弹（生成炸弹对象）
+ *  角色贴图位置刷新和死亡判定
+ */
 class Character
 {
 private:

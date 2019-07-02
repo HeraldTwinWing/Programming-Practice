@@ -4,6 +4,10 @@
 #include "Window.h"
 #include "Character.h"
 
+/** 重新开始按钮
+ *  重置角色与地图
+ */
+
 class RestartButton
 {
 private:

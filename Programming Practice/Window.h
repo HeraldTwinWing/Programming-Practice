@@ -6,6 +6,8 @@
 #include <iostream>
 #include <SDL_image.h>
 
+/*显示窗口与加载资源*/
+
 class Window
 {
 private:

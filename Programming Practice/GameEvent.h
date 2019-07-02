@@ -3,6 +3,8 @@
 #include "Character.h"
 #include "RestartButton.h"
 
+/** 处理游戏的输入事件(键盘、鼠标)
+ */
 class GameEvent
 {
 public:

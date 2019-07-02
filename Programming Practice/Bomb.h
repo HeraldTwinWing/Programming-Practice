@@ -4,6 +4,9 @@
 #include "Map.h"
 #include "Window.h"
 
+/** Õ¨µ¯
+ *  ¿ØÖÆÕ¨µ¯µÄÏÔÊ¾£¬±¬Õ¨
+ */
 class Bomb
 {
 private:
