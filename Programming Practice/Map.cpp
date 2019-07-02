@@ -60,11 +60,10 @@ bool Map::destruct(int x, int y)
 
 void Map::destructBlock(int x, int y)
 {
-    if (judgeBlockType(x, y) == DESTRUCTIBLE)
-    {
+    if (judgeBlockType(x,y) == DESTRUCTIBLE)
         map[y][x] = EMPTY;
-    }
 }
+
 
 
 

@@ -6,13 +6,6 @@
 #include "Map.h"
 #include "Bomb.h"
 #include "Window.h"
- 
-enum ItemEnum
-{
-    POTION,
-    BOMBITEM,
-    SHOES
-};
 
 class Character
 {
@@ -25,7 +18,6 @@ private:
     SDL_Texture* deadTexture;
     SDL_Rect texturePos;
     int speed;
-    int maxSpeed;
     double moveTemp[2]; //保存位移的小数部分 [x,y]
     bool moving[4];     //[上，右，下，左]
     bool dead;
@@ -40,10 +32,8 @@ public:
     void move(double deltaTime);
     void setMoving(int direction);
     void placeBomb(SDL_Point pos);
-    void attributeUp(ItemEnum attri);
     bool isNotDead();
     bool isDead();
-    bool isAttributeReachesUpperLimit(ItemEnum attri);
     void p1KeyDownEvent(SDL_Keycode sym);
     void p2KeyDownEvent(SDL_Keycode sym);
     void p1KeyUpEvent(SDL_Keycode sym);
